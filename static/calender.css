@@ -1,0 +1,14 @@
+.calendar-grid {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.calendar-grid td, .calendar-grid th {
+    border: 1px solid black;
+    height: 60px;
+    text-align: center;
+}
+
+.gym-day {
+    background-color: #90ee90; /* This makes the cell green */
+}
