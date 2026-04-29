@@ -1,4 +1,4 @@
 # Ignore Environment Variables
 .env
 
-.venv
+/venv
