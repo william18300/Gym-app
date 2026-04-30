@@ -1,7 +1,9 @@
 import os
+import Backend.WorkOut as bw
 from flask import Flask
 from supabase import create_client, Client
 from dotenv import load_dotenv
+from flask import Flask, render_template
 
 load_dotenv()
 
@@ -14,15 +16,31 @@ supabase: Client = create_client(
 
 @app.route('/')
 def index():
-    response = supabase.table('workouts').select("*").execute()
-    todos = response.data
+    user_name = "William"
 
-    html = '<h1>Todos</h1><ul>'
-    for todo in todos:
-        html += f'<li>{todo["workout"]}</li>'
-    html += '</ul>'
+    return render_template('index.html',name = user_name, workout_options= bw.AllowedWorkouts.list_names())
 
-    return html
+from flask import Flask, render_template, request, redirect
+
+@app.route('/add_workout', methods=['POST'])
+def add_workout():
+    # 1. Get data from the form
+    name = request.form.get('workout_name')
+    sets = request.form.get('sets')
+    reps = request.form.get('reps')
+
+    if name not in bw.AllowedWorkouts.list_names():
+        print(f"DEBUG: Received workout '{name}' with {sets} sets")
+        return "Error: This workout isn't anitmated yet ", 400
+
+
+    # 2. Add your Database logic here (SQLAlchemy or Supabase)
+    # new_workout = WorkOut(name=name, sets=sets, reps=reps)
+    # session.add(new_workout)
+    # session.commit()
+
+    # 3. Send the user back to the home page
+    return redirect('/')
 
 if __name__ == '__main__':
     app.run(debug=True)
