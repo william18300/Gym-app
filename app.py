@@ -28,10 +28,21 @@ def add_workout():
     name = request.form.get('workout_name')
     sets = request.form.get('sets')
     reps = request.form.get('reps')
+    weight = request.form.get('weight')
 
     if name not in bw.AllowedWorkouts.list_names():
         print(f"DEBUG: Received workout '{name}' with {sets} sets")
         return "Error: This workout isn't anitmated yet ", 400
+    
+    new_workout = bw.WorkOut(
+    workout= name,
+    sets=sets,
+    reps=reps,
+    weight=weight
+    )
+
+    data, count = supabase.table("workouts").insert(new_workout.to_dict()).execute()
+
 
 
     # 2. Add your Database logic here (SQLAlchemy or Supabase)
