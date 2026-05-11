@@ -29,7 +29,8 @@ SplitType.PUSH.value: [
     AllowedWorkouts.Bench_Press.value, 
     AllowedWorkouts.Push_Up.value, 
     AllowedWorkouts.Shoulder_Press.value,
-    AllowedWorkouts.Machine_Fly_Push.value
+    AllowedWorkouts.Machine_Fly_Push.value,
+    AllowedWorkouts.Chest_Press.value
 ],
 SplitType.PULL.value: [
     AllowedWorkouts.Machine_Fly_Pull.value,
