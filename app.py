@@ -1,9 +1,8 @@
 import os
 import Backend.WorkOut as bw
-from flask import Flask
 from supabase import create_client, Client
 from dotenv import load_dotenv
-from flask import Flask, render_template
+from flask import Flask, render_template, jsonify, request, redirect, url_for
 
 load_dotenv()
 
@@ -41,8 +40,33 @@ def add_workout():
     weight=weight
     )
 
+    print(new_workout.to_dict())
     data, count = supabase.table("workouts").insert(new_workout.to_dict()).execute()
 
+    return redirect(url_for('index'))
+
+
+@app.route('/calendar')
+def show_calendar():
+    return render_template('calendar.html')
+
+@app.route('/api/workouts')
+def get_workouts():
+    # 1. Fetch from Supabase
+    response = supabase.table("workouts").select("*").execute()
+    
+    # 2. Format for FullCalendar
+    events = []
+    for row in response.data:
+
+        clean_date = str(row['created_at'])[:10]
+
+        events.append({
+            'title': f"{row['workout']} ({row['reps']} reps) ({row['weight']} pounds)",
+            'start': clean_date, 
+            'color': '#2e5bff' # Your electric blue!
+        })
+    return jsonify(events)
 
 
     # 2. Add your Database logic here (SQLAlchemy or Supabase)
@@ -52,6 +76,14 @@ def add_workout():
 
     # 3. Send the user back to the home page
     return redirect('/')
+
+@app.route('/library')
+def workout_library():
+    return render_template('library.html', library=bw.WORKOUT_DETAILS)
+
+@app.route('/faq')
+def faq():
+    return render_template('faq.html')
 
 if __name__ == '__main__':
     app.run(debug=True)

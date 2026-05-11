@@ -1,0 +1,42 @@
+{% extends "layout.html" %}
+
+{% block title %}Calendar View{% endblock %}
+
+{% block content %}
+<div id="calendar"></div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var calendarEl = document.getElementById('calendar');
+    
+    // Safety check: only run if the element actually exists
+    if (calendarEl) {
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+          initialView: 'dayGridMonth',
+          lugins: [ 'dayGrid', 'interaction' ],
+          dateClick: function(info) {
+            // 'info.dateStr' gives you the date in 'YYYY-MM-DD' format
+            alert('Date clicked: ' + info.dateStr);
+            
+            // To "bring you somewhere", use window.location.href
+            // This will redirect you to your home page with the date attached!
+            window.location.href = "/";
+          },
+          height: 'auto',
+          aspectRatio: 1.5,
+          expandRows: true,
+          handleWindowResize: true,
+          headerToolbar: {
+            left: 'prev,next today',
+            center: 'title',
+            right: 'dayGridMonth,listWeek'
+          },
+          events: '/api/workouts',
+
+          dayMaxEvents: false,
+        });
+        calendar.render();
+    }
+  });
+</script>
+{% endblock %}
